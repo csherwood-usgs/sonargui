@@ -9,10 +9,10 @@ beam_len = 1;      % ADCP beam length
 caselen = .389;    % length of case
 caserad = .12;     % radius of case
 
-% tripod coordinates
+% tripod coordinates  (assumes tripod is always in the (1) element
 tpry = handles.instloc(1).pry*d2r;
 txyzo = handles.instloc(1).xyz;
-% adcp coordinates
+% adcp coordinates  (assumes adcp is always the (2) element
 pry = handles.instloc(2).pry*d2r;
 xyzo = handles.instloc(2).xyz;
 

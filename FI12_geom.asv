@@ -22,7 +22,7 @@ instloc(2).oval=-13.5;
 
 instloc(3).name='fanbeam sonar';
 instloc(3).coord='lab';
-instloc(3).xyz=[0.14 -0.4 .6];
+instloc(3).xyz=[0-.14 -0.4 .6];
 instloc(3).pry=[0 0 -50];  % we measured fan 180, so this is corrected to 0
 instloc(3).oname='none';
 instloc(3).oval=0.;
