@@ -1,5 +1,6 @@
 function varargout = sonarguiFI(varargin)
 % SONARGUIFI MATLAB code for sonarguiFI.fig
+%   OLD VERSION - do NOT use!  etm 4/3/13
 %      SONARGUIFI, by itself, creates a new SONARGUIFI or raises the existing
 %      singleton*.
 %
@@ -134,7 +135,7 @@ function varargout = sonarguiFI_OutputFcn(hObject, eventdata, handles)
 
 % Get default command line output from handles structure
 varargout{1} = handles.output;
-
+% etm- I think these are all for initial configuration
 % --- Executes on button press in pushbutton1.
 function pushbutton1_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton1 (see GCBO)
@@ -145,15 +146,18 @@ cla;
 
 popup_sel_index = get(handles.popupmenu1, 'Value');
 replot(handles)
-
-
+% --- Executes on selection change in popupmenu1.
+function popupmenu1_Callback(hObject, eventdata, handles)
+% hObject    handle to popupmenu1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+% Hints: contents = get(hObject,'String') returns popupmenu1 contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from popupmenu1
 % --------------------------------------------------------------------
 function FileMenu_Callback(hObject, eventdata, handles)
 % hObject    handle to FileMenu (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
-
 % --------------------------------------------------------------------
 function OpenMenuItem_Callback(hObject, eventdata, handles)
 % hObject    handle to OpenMenuItem (see GCBO)
@@ -163,14 +167,12 @@ file = uigetfile('*.fig');
 if ~isequal(file, 0)
    open(file);
 end
-
 % --------------------------------------------------------------------
 function PrintMenuItem_Callback(hObject, eventdata, handles)
 % hObject    handle to PrintMenuItem (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 printdlg(handles.figure1)
-
 % --------------------------------------------------------------------
 function CloseMenuItem_Callback(hObject, eventdata, handles)
 % hObject    handle to CloseMenuItem (see GCBO)
@@ -183,18 +185,14 @@ if strcmp(selection,'No')
    return;
 end
 delete(handles.figure1)
+% end of set-up stuff that may or may not be functional
 
-
-% --- Executes on selection change in popupmenu1.
-function popupmenu1_Callback(hObject, eventdata, handles)
-% hObject    handle to popupmenu1 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: contents = get(hObject,'String') returns popupmenu1 contents as cell array
-%        contents{get(hObject,'Value')} returns selected item from popupmenu1
-
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% create functions- made in guide as CRS added features
+% order here is more or less from left across the top, then down the
+% right side, in order of appeance.  The figure sub-window is axes2, and
+% doesn't seem to be manipulated in this code
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % --- Executes during object creation, after setting all properties.
 function popupmenu1_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to popupmenu1 (see GCBO)
@@ -206,20 +204,19 @@ function popupmenu1_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
    set(hObject,'BackgroundColor','white');
 end
-
 set(hObject, 'String', {'plot(rand(5))', 'plot(sin(1:0.01:25))', 'bar(1:.5:10)', 'plot(membrane)', 'surf(peaks)'});
 
-% --- Executes on slider movement.
-function yaw_slider_Callback(hObject, eventdata, handles)
-% hObject    handle to yaw_slider (see GCBO)
+% --- Executes during object creation, after setting all properties.
+function instrument_popupmenu4_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to instrument_popupmenu4 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
+% handles    empty - handles not created until after all CreateFcns called
 
-% Hints: get(hObject,'Value') returns position of slider
-%        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
-yaw = get(hObject,'Value');
-set(handles.edit_yaw,'String',num2str(yaw));
-replot(handles)
+% Hint: popupmenu controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
 
 % --- Executes during object creation, after setting all properties.
 function yaw_slider_CreateFcn(hObject, eventdata, handles)
@@ -231,17 +228,6 @@ function yaw_slider_CreateFcn(hObject, eventdata, handles)
 if isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor',[.9 .9 .9]);
 end
-
-function edit_yaw_Callback(hObject, eventdata, handles)
-% hObject    handle to edit_yaw (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of edit_yaw as text
-%        str2double(get(hObject,'String')) returns contents of edit_yaw as a double
-yaw = str2double(get(hObject,'String'))
-set(handles.yaw_slider,'Value',yaw)
-replot(handles)
 
 % --- Executes during object creation, after setting all properties.
 function edit_yaw_CreateFcn(hObject, eventdata, handles)
@@ -255,18 +241,6 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
     set(hObject,'BackgroundColor','white');
 end
 
-% --- Executes on slider movement.
-function pitch_slider_Callback(hObject, eventdata, handles)
-% hObject    handle to pitch_slider (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'Value') returns position of slider
-%        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
-pitch = get(hObject,'Value');
-set(handles.edit_pitch,'String',num2str(pitch));
-replot(handles)
-
 % --- Executes during object creation, after setting all properties.
 function pitch_slider_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to pitch_slider (see GCBO)
@@ -277,63 +251,6 @@ function pitch_slider_CreateFcn(hObject, eventdata, handles)
 if isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
    set(hObject,'BackgroundColor',[.9 .9 .9]);
 end
-
-% --- Executes on slider movement.
-function roll_slider_Callback(hObject, eventdata, handles)
-% hObject    handle to roll_slider (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'Value') returns position of slider
-%        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
-roll = get(hObject,'Value');
-set(handles.edit_roll,'String',num2str(roll));
-replot(handles)
-
-% --- Executes during object creation, after setting all properties.
-function roll_slider_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to roll_slider (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: slider controls usually have a light gray background.
-if isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-   set(hObject,'BackgroundColor',[.9 .9 .9]);
-end
-
-% --- Executes on slider movement.
-function height_slider_Callback(hObject, eventdata, handles)
-% hObject    handle to height_slider (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'Value') returns position of slider
-%        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
-height = get(hObject,'Value');
-set(handles.edit_height,'String',num2str(height));
-replot(handles)
-
-% --- Executes during object creation, after setting all properties.
-function height_slider_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to height_slider (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: slider controls usually have a light gray background.
-if isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-   set(hObject,'BackgroundColor',[.9 .9 .9]);
-end
-
-function edit_pitch_Callback(hObject, eventdata, handles)
-% hObject    handle to edit_pitch (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of edit_pitch as text
-%        str2double(get(hObject,'String')) returns contents of edit_pitch as a double
-pitch = str2double(get(hObject,'String'))
-set(handles.pitch_slider,'Value',pitch)
-replot(handles)
 
 % --- Executes during object creation, after setting all properties.
 function edit_pitch_CreateFcn(hObject, eventdata, handles)
@@ -347,16 +264,16 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
    set(hObject,'BackgroundColor','white');
 end
 
-function edit_roll_Callback(hObject, eventdata, handles)
-% hObject    handle to edit_roll (see GCBO)
+% --- Executes during object creation, after setting all properties.
+function roll_slider_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to roll_slider (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
+% handles    empty - handles not created until after all CreateFcns called
 
-% Hints: get(hObject,'String') returns contents of edit_roll as text
-%        str2double(get(hObject,'String')) returns contents of edit_roll as a double
-roll = str2double(get(hObject,'String'))
-set(handles.roll_slider,'Value',roll)
-replot(handles)
+% Hint: slider controls usually have a light gray background.
+if isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+   set(hObject,'BackgroundColor',[.9 .9 .9]);
+end
 
 % --- Executes during object creation, after setting all properties.
 function edit_roll_CreateFcn(hObject, eventdata, handles)
@@ -370,16 +287,16 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
    set(hObject,'BackgroundColor','white');
 end
 
-function edit_height_Callback(hObject, eventdata, handles)
-% hObject    handle to edit_height (see GCBO)
+% --- Executes during object creation, after setting all properties.
+function height_slider_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to height_slider (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
+% handles    empty - handles not created until after all CreateFcns called
 
-% Hints: get(hObject,'String') returns contents of edit_height as text
-%        str2double(get(hObject,'String')) returns contents of edit_height as a double
-height = str2double(get(hObject,'String'))
-set(handles.height_slider,'Value',height)
-replot(handles)
+% Hint: slider controls usually have a light gray background.
+if isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+   set(hObject,'BackgroundColor',[.9 .9 .9]);
+end
 
 % --- Executes during object creation, after setting all properties.
 function edit_height_CreateFcn(hObject, eventdata, handles)
@@ -393,18 +310,6 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
    set(hObject,'BackgroundColor','white');
 end
 
-% --- Executes on slider movement.
-function easting_slider5_Callback(hObject, eventdata, handles)
-% hObject    handle to easting_slider5 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'Value') returns position of slider
-%        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
-easting = get(hObject,'Value');
-set(handles.easting_edit5,'String',num2str(easting));
-replot(handles)
-
 % --- Executes during object creation, after setting all properties.
 function easting_slider5_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to easting_slider5 (see GCBO)
@@ -415,17 +320,6 @@ function easting_slider5_CreateFcn(hObject, eventdata, handles)
 if isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor',[.9 .9 .9]);
 end
-
-function easting_edit5_Callback(hObject, eventdata, handles)
-% hObject    handle to easting_edit5 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of easting_edit5 as text
-%        str2double(get(hObject,'String')) returns contents of easting_edit5 as a double
-easting = str2double(get(hObject,'String'))
-set(handles.easting_slider5,'Value',easting)
-replot(handles)
 
 % --- Executes during object creation, after setting all properties.
 function easting_edit5_CreateFcn(hObject, eventdata, handles)
@@ -439,18 +333,6 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
     set(hObject,'BackgroundColor','white');
 end
 
-% --- Executes on slider movement.
-function northing_slider6_Callback(hObject, eventdata, handles)
-% hObject    handle to northing_slider6 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'Value') returns position of slider
-%        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
-northing = get(hObject,'Value');
-set(handles.northing_edit6,'String',num2str(northing));
-replot(handles)
-
 % --- Executes during object creation, after setting all properties.
 function northing_slider6_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to northing_slider6 (see GCBO)
@@ -461,17 +343,6 @@ function northing_slider6_CreateFcn(hObject, eventdata, handles)
 if isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor',[.9 .9 .9]);
 end
-
-function northing_edit6_Callback(hObject, eventdata, handles)
-% hObject    handle to northing_edit6 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of northing_edit6 as text
-%        str2double(get(hObject,'String')) returns contents of northing_edit6 as a double
-northing = str2double(get(hObject,'String'))
-set(handles.northing_slider6,'Value',northing)
-replot(handles)
 
 % --- Executes during object creation, after setting all properties.
 function northing_edit6_CreateFcn(hObject, eventdata, handles)
@@ -485,18 +356,6 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
     set(hObject,'BackgroundColor','white');
 end
 
-% --- Executes on selection change in view_popupmenu3.
-function view_popupmenu3_Callback(hObject, eventdata, handles)
-% hObject    handle to view_popupmenu3 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: contents = cellstr(get(hObject,'String')) returns view_popupmenu3 contents as cell array
-%        contents{get(hObject,'Value')} returns selected item from view_popupmenu3
-load sonar_output.mat
-handles.tripod=tripod;  %kludge to get the right thing in tripod
-replot(handles)
-
 % --- Executes during object creation, after setting all properties.
 function view_popupmenu3_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to view_popupmenu3 (see GCBO)
@@ -509,16 +368,28 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
     set(hObject,'BackgroundColor','white');
 end
 
-function compass_hdg_edit7_Callback(hObject, eventdata, handles)
-% hObject    handle to compass_hdg_edit7 (see GCBO)
+% --- Executes during object creation, after setting all properties.
+function experiment_popupmenu6_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to experiment_popupmenu6 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
+% handles    empty - handles not created until after all CreateFcns called
 
-% Hints: get(hObject,'String') returns contents of compass_hdg_edit7 as text
-%        str2double(get(hObject,'String')) returns contents of compass_hdg_edit7 as a double
-use_compass = get(handles.usecompass_radiobutton8,'Value')
-if(use_compass),
-replot(handles)
+% Hint: popupmenu controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+% --- Executes during object creation, after setting all properties.
+function azdata_popupmenu5_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to azdata_popupmenu5 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: popupmenu controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
 end
 
 % --- Executes during object creation, after setting all properties.
@@ -531,18 +402,6 @@ function compass_hdg_edit7_CreateFcn(hObject, eventdata, handles)
 %       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
-end
-
-function compass_pitch_edit8_Callback(hObject, eventdata, handles)
-% hObject    handle to compass_pitch_edit8 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of compass_pitch_edit8 as text
-%        str2double(get(hObject,'String')) returns contents of compass_pitch_edit8 as a double
-use_compass = get(handles.usecompass_radiobutton8,'Value')
-if(use_compass)
-replot(handles)
 end
 
 % --- Executes during object creation, after setting all properties.
@@ -558,126 +417,6 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
 end
 
 % --- Executes during object creation, after setting all properties.
-function instrument_popupmenu4_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to instrument_popupmenu4 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: popupmenu controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
-end
-
-% --- Executes on button press in tripod_radiobutton2.
-function tripod_radiobutton2_Callback(hObject, eventdata, handles)
-% hObject    handle to tripod_radiobutton2 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hint: get(hObject,'Value') returns toggle state of tripod_radiobutton2
-replot( handles )
-
-% --- Executes on button press in adcp_radiobutton3.
-function adcp_radiobutton3_Callback(hObject, eventdata, handles)
-% hObject    handle to adcp_radiobutton3 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hint: get(hObject,'Value') returns toggle state of adcp_radiobutton3
-replot( handles )
-
-% --- Executes on button press in fanbeam_radiobutton4.
-function fanbeam_radiobutton4_Callback(hObject, eventdata, handles)
-% hObject    handle to fanbeam_radiobutton4 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hint: get(hObject,'Value') returns toggle state of fanbeam_radiobutton4
-replot( handles )
-
-% --- Executes on button press in azdrive_radiobutton5.
-function azdrive_radiobutton5_Callback(hObject, eventdata, handles)
-% hObject    handle to azdrive_radiobutton5 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hint: get(hObject,'Value') returns toggle state of azdrive_radiobutton5
-replot (handles )
-
-% --- Executes on button press in save_pushbutton4.
-function save_pushbutton4_Callback(hObject, eventdata, handles)
-% hObject    handle to save_pushbutton4 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-inst = handles.inst;
-tripod = handles.tripod;
-instloc = handles.instloc;
-cmpss = handles.cmpss;
-plotinfo= handles.plotinfo;
-save sonar_output.mat inst instloc tripod cmpss plotinfo
-
-% --- Executes on selection change in azdata_popupmenu5.
-function azdata_popupmenu5_Callback(hObject, eventdata, handles)
-% hObject    handle to azdata_popupmenu5 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: contents = cellstr(get(hObject,'String')) returns azdata_popupmenu5 contents as cell array
-%        contents{get(hObject,'Value')} returns selected item from azdata_popupmenu5
-experiment = get(handles.experiment_popupmenu6,'Value');
-switch experiment
-   case 1
-      dpath='c:\home\data\unh\sonar_data\';
-      exname='UNH tank';
-   case 2
-      dpath='c:\home\data\mvco_07\sonar_data\';
-      exname='MVCO 2007';
-   case 3
-      exname='hatteras 2009'
-   case 4
-      dpath='c:\home\data\FI2012\sonar_post\Iris_az\';
-      exname='Fire Island 2012';
-      FImag_var=-13.5
-end
-
-handles.path=dpath;
-replot( handles )
-
-% --- Executes during object creation, after setting all properties.
-function azdata_popupmenu5_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to azdata_popupmenu5 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: popupmenu controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
-end
-
-% --- Executes on button press in showfloor_radiobutton7.
-function showfloor_radiobutton7_Callback(hObject, eventdata, handles)
-% hObject    handle to showfloor_radiobutton7 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hint: get(hObject,'Value') returns toggle state of showfloor_radiobutton7
-replot( handles )
-
-function compass_roll_edit9_Callback(hObject, eventdata, handles)
-% hObject    handle to compass_roll_edit9 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of compass_roll_edit9 as text
-%        str2double(get(hObject,'String')) returns contents of compass_roll_edit9 as a double
-use_compass = get(handles.usecompass_radiobutton8,'Value')
-if(use_compass),
-replot(handles)
-end
-
-% --- Executes during object creation, after setting all properties.
 function compass_roll_edit9_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to compass_roll_edit9 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -687,18 +426,6 @@ function compass_roll_edit9_CreateFcn(hObject, eventdata, handles)
 %       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
-end
-
-function magvar_edit10_Callback(hObject, eventdata, handles)
-% hObject    handle to magvar_edit10 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of magvar_edit10 as text
-%        str2double(get(hObject,'String')) returns contents of magvar_edit10 as a double
-use_compass = get(handles.usecompass_radiobutton8,'Value')
-if(use_compass),
-replot(handles)
 end
 
 % --- Executes during object creation, after setting all properties.
@@ -713,14 +440,6 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
     set(hObject,'BackgroundColor','white');
 end
 
-function datetime_edit11_Callback(hObject, eventdata, handles)
-% hObject    handle to datetime_edit11 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of datetime_edit11 as text
-%        str2double(get(hObject,'String')) returns contents of datetime_edit11 as a double
-
 % --- Executes during object creation, after setting all properties.
 function datetime_edit11_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to datetime_edit11 (see GCBO)
@@ -733,15 +452,229 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
     set(hObject,'BackgroundColor','white');
 end
 
-% --- Executes on button press in usecompass_radiobutton8.
-function usecompass_radiobutton8_Callback(hObject, eventdata, handles)
-% hObject    handle to usecompass_radiobutton8 (see GCBO)
+% --- Executes during object creation, after setting all properties.
+function tindex_edit12_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to tindex_edit12 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+% --- Executes during object creation, after setting all properties.
+function plot_x_axis_edit13_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to plot_x_axis_edit13 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+% --- Executes during object creation, after setting all properties.
+function plot_y_axis_edit14_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to plot_y_axis_edit14 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+% --- Executes during object creation, after setting all properties.
+function plot_z_axis_edit15_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to plot_z_axis_edit15 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% callback functions
+% order here is more or less from left across the top, then down the
+% right side, in order of appeance.  The figure sub-window is axes2, and
+% doesn't seem to be manipulated in this code
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% --- Executes on selection change in instrument_popupmenu4.
+% this is what happens when you select tripod, adcp, fan or az at top left
+function instrument_popupmenu4_Callback(hObject, eventdata, handles)
+% hObject    handle to instrument_popupmenu4 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hint: get(hObject,'Value') returns toggle state of usecompass_radiobutton8
+% Hints: contents = cellstr(get(hObject,'String')) returns instrument_popupmenu4 contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from instrument_popupmenu4
+ load sonar_output.mat
+  old_inst = inst;
+ inst = get(hObject,'Value');
+ save sonar_output.mat inst instloc tripod cmpss
+% 
+ handles.inst = inst;
+ handles.tripod=tripod;
+set(handles.instrument_popupmenu4,'Value',inst);
+set(handles.pitch_slider,'Value',handles.instloc(inst).pry(1));
+set(handles.edit_pitch,'String',num2str(handles.instloc(inst).pry(1)));
+set(handles.roll_slider,'Value',handles.instloc(inst).pry(2));
+set(handles.edit_roll,'String',num2str(handles.instloc(inst).pry(2)));
+set(handles.yaw_slider,'Value',handles.instloc(inst).pry(3));
+set(handles.edit_yaw,'String',num2str(handles.instloc(inst).pry(3)));
+
+set(handles.easting_slider5,'Value',handles.instloc(inst).xyz(1));
+set(handles.easting_edit5,'String',num2str(handles.instloc(inst).xyz(1)));
+set(handles.northing_slider6,'Value',handles.instloc(inst).xyz(2));
+set(handles.northing_edit6,'String',num2str(handles.instloc(inst).xyz(2)));
+set(handles.height_slider,'Value',handles.instloc(inst).xyz(3));
+set(handles.edit_height,'String',num2str(handles.instloc(inst).xyz(3)));
+guidata(hObject,handles); % Store the changes.
 replot( handles )
 
+% --- Executes on slider movement.
+function yaw_slider_Callback(hObject, eventdata, handles)
+% hObject    handle to yaw_slider (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'Value') returns position of slider
+%        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
+yaw = get(hObject,'Value');
+set(handles.edit_yaw,'String',num2str(yaw));
+replot(handles)
+
+% --- Executes on slider movement.
+function pitch_slider_Callback(hObject, eventdata, handles)
+% hObject    handle to pitch_slider (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'Value') returns position of slider
+%        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
+pitch = get(hObject,'Value');
+set(handles.edit_pitch,'String',num2str(pitch));
+replot(handles)
+
+% --- Executes on slider movement.
+function roll_slider_Callback(hObject, eventdata, handles)
+% hObject    handle to roll_slider (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'Value') returns position of slider
+%        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
+roll = get(hObject,'Value');
+set(handles.edit_roll,'String',num2str(roll));
+replot(handles)
+
+function edit_yaw_Callback(hObject, eventdata, handles)
+% hObject    handle to edit_yaw (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit_yaw as text
+%        str2double(get(hObject,'String')) returns contents of edit_yaw as a double
+yaw = str2double(get(hObject,'String'))
+set(handles.yaw_slider,'Value',yaw)
+replot(handles)
+
+function edit_pitch_Callback(hObject, eventdata, handles)
+% hObject    handle to edit_pitch (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit_pitch as text
+%        str2double(get(hObject,'String')) returns contents of edit_pitch as a double
+pitch = str2double(get(hObject,'String'))
+set(handles.pitch_slider,'Value',pitch)
+replot(handles)
+
+function edit_roll_Callback(hObject, eventdata, handles)
+% hObject    handle to edit_roll (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit_roll as text
+%        str2double(get(hObject,'String')) returns contents of edit_roll as a double
+roll = str2double(get(hObject,'String'))
+set(handles.roll_slider,'Value',roll)
+replot(handles)
+
+% --- Executes on slider movement.
+function height_slider_Callback(hObject, eventdata, handles)
+% hObject    handle to height_slider (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'Value') returns position of slider
+%        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
+height = get(hObject,'Value');
+set(handles.edit_height,'String',num2str(height));
+replot(handles)
+
+function edit_height_Callback(hObject, eventdata, handles)
+% hObject    handle to edit_height (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit_height as text
+%        str2double(get(hObject,'String')) returns contents of edit_height as a double
+height = str2double(get(hObject,'String'))
+set(handles.height_slider,'Value',height)
+replot(handles)
+
+% --- Executes on slider movement.
+function easting_slider5_Callback(hObject, eventdata, handles)
+% hObject    handle to easting_slider5 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'Value') returns position of slider
+%        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
+easting = get(hObject,'Value');
+set(handles.easting_edit5,'String',num2str(easting));
+replot(handles)
+
+function easting_edit5_Callback(hObject, eventdata, handles)
+% hObject    handle to easting_edit5 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of easting_edit5 as text
+%        str2double(get(hObject,'String')) returns contents of easting_edit5 as a double
+easting = str2double(get(hObject,'String'))
+set(handles.easting_slider5,'Value',easting)
+replot(handles)
+
+% --- Executes on slider movement.
+function northing_slider6_Callback(hObject, eventdata, handles)
+% hObject    handle to northing_slider6 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'Value') returns position of slider
+%        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
+northing = get(hObject,'Value');
+set(handles.northing_edit6,'String',num2str(northing));
+replot(handles)
+
+function northing_edit6_Callback(hObject, eventdata, handles)
+% hObject    handle to northing_edit6 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of northing_edit6 as text
+%        str2double(get(hObject,'String')) returns contents of northing_edit6 as a double
+northing = str2double(get(hObject,'String'))
+set(handles.northing_slider6,'Value',northing)
+replot(handles)
 
 % --- Executes on selection change in experiment_popupmenu6.
 % this is where you land when you choose an experiment
@@ -785,17 +718,32 @@ handles.old_inst = 1;
 save sonar_output.mat inst instloc tripod cmpss plotinfo
 replot (handles )
 
-% --- Executes during object creation, after setting all properties.
-function experiment_popupmenu6_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to experiment_popupmenu6 (see GCBO)
+% --- Executes on selection change in azdata_popupmenu5.
+function azdata_popupmenu5_Callback(hObject, eventdata, handles)
+% hObject    handle to azdata_popupmenu5 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
+% handles    structure with handles and user data (see GUIDATA)
 
-% Hint: popupmenu controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
+% Hints: contents = cellstr(get(hObject,'String')) returns azdata_popupmenu5 contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from azdata_popupmenu5
+experiment = get(handles.experiment_popupmenu6,'Value');
+switch experiment
+   case 1
+      dpath='c:\home\data\unh\sonar_data\';
+      exname='UNH tank';
+   case 2
+      dpath='c:\home\data\mvco_07\sonar_data\';
+      exname='MVCO 2007';
+   case 3
+      exname='hatteras 2009'
+   case 4
+      dpath='c:\home\data\FI2012\sonar_post\Iris_az\';
+      exname='Fire Island 2012';
+      FImag_var=-13.5
 end
+
+handles.path=dpath;
+replot( handles )
 
 
 function tindex_edit12_Callback(hObject, eventdata, handles)
@@ -807,48 +755,119 @@ function tindex_edit12_Callback(hObject, eventdata, handles)
 %        str2double(get(hObject,'String')) returns contents of tindex_edit12 as a double
 replot(handles)
 
-% --- Executes during object creation, after setting all properties.
-function tindex_edit12_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to tindex_edit12 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
-end
-
-% --- Executes on selection change in instrument_popupmenu4.
-function instrument_popupmenu4_Callback(hObject, eventdata, handles)
-% hObject    handle to instrument_popupmenu4 (see GCBO)
+% --- Executes on button press in usecompass_radiobutton8.
+function usecompass_radiobutton8_Callback(hObject, eventdata, handles)
+% hObject    handle to usecompass_radiobutton8 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: contents = cellstr(get(hObject,'String')) returns instrument_popupmenu4 contents as cell array
-%        contents{get(hObject,'Value')} returns selected item from instrument_popupmenu4
-% load sonar_output.mat
-% old_inst = inst;
-% inst = get(hObject,'Value');
-% save sonar_output.mat inst instloc tripod cmpss
-% 
-% handles.inst = inst;
-set(handles.instrument_popupmenu4,'Value',inst);
-set(handles.pitch_slider,'Value',handles.instloc(inst).pry(1));
-set(handles.edit_pitch,'String',num2str(handles.instloc(inst).pry(1)));
-set(handles.roll_slider,'Value',handles.instloc(inst).pry(2));
-set(handles.edit_roll,'String',num2str(handles.instloc(inst).pry(2)));
-set(handles.yaw_slider,'Value',handles.instloc(inst).pry(3));
-set(handles.edit_yaw,'String',num2str(handles.instloc(inst).pry(3)));
-
-set(handles.easting_slider5,'Value',handles.instloc(inst).xyz(1));
-set(handles.easting_edit5,'String',num2str(handles.instloc(inst).xyz(1)));
-set(handles.northing_slider6,'Value',handles.instloc(inst).xyz(2));
-set(handles.northing_edit6,'String',num2str(handles.instloc(inst).xyz(2)));
-set(handles.height_slider,'Value',handles.instloc(inst).xyz(3));
-set(handles.edit_height,'String',num2str(handles.instloc(inst).xyz(3)));
-guidata(hObject,handles); % Store the changes.
+% Hint: get(hObject,'Value') returns toggle state of usecompass_radiobutton8
 replot( handles )
+
+function compass_hdg_edit7_Callback(hObject, eventdata, handles)
+% hObject    handle to compass_hdg_edit7 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of compass_hdg_edit7 as text
+%        str2double(get(hObject,'String')) returns contents of compass_hdg_edit7 as a double
+use_compass = get(handles.usecompass_radiobutton8,'Value')
+if(use_compass),
+replot(handles)
+end
+
+function compass_pitch_edit8_Callback(hObject, eventdata, handles)
+% hObject    handle to compass_pitch_edit8 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of compass_pitch_edit8 as text
+%        str2double(get(hObject,'String')) returns contents of compass_pitch_edit8 as a double
+use_compass = get(handles.usecompass_radiobutton8,'Value')
+if(use_compass)
+replot(handles)
+end
+
+function compass_roll_edit9_Callback(hObject, eventdata, handles)
+% hObject    handle to compass_roll_edit9 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of compass_roll_edit9 as text
+%        str2double(get(hObject,'String')) returns contents of compass_roll_edit9 as a double
+use_compass = get(handles.usecompass_radiobutton8,'Value')
+if(use_compass),
+replot(handles)
+end
+
+function magvar_edit10_Callback(hObject, eventdata, handles)
+% hObject    handle to magvar_edit10 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of magvar_edit10 as text
+%        str2double(get(hObject,'String')) returns contents of magvar_edit10 as a double
+use_compass = get(handles.usecompass_radiobutton8,'Value')
+if(use_compass),
+replot(handles)
+end
+
+% --- Executes on button press in tripod_radiobutton2.
+function tripod_radiobutton2_Callback(hObject, eventdata, handles)
+% hObject    handle to tripod_radiobutton2 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of tripod_radiobutton2
+replot( handles )
+
+% --- Executes on button press in adcp_radiobutton3.
+function adcp_radiobutton3_Callback(hObject, eventdata, handles)
+% hObject    handle to adcp_radiobutton3 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of adcp_radiobutton3
+replot( handles )
+
+% --- Executes on button press in fanbeam_radiobutton4.
+function fanbeam_radiobutton4_Callback(hObject, eventdata, handles)
+% hObject    handle to fanbeam_radiobutton4 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of fanbeam_radiobutton4
+replot( handles )
+
+% --- Executes on button press in azdrive_radiobutton5.
+function azdrive_radiobutton5_Callback(hObject, eventdata, handles)
+% hObject    handle to azdrive_radiobutton5 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of azdrive_radiobutton5
+replot (handles )
+
+% --- Executes on button press in showfloor_radiobutton7.
+function showfloor_radiobutton7_Callback(hObject, eventdata, handles)
+% hObject    handle to showfloor_radiobutton7 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of showfloor_radiobutton7
+replot( handles )
+
+% --- Executes on selection change of viewpoint/perspective in view_popupmenu3.
+function view_popupmenu3_Callback(hObject, eventdata, handles)
+% hObject    handle to view_popupmenu3 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = cellstr(get(hObject,'String')) returns view_popupmenu3 contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from view_popupmenu3
+load sonar_output.mat
+handles.tripod=tripod;  %kludge to get the right thing in tripod
+replot(handles)
 
 % --- Executes on button press in reset_pushbutton5.
 function reset_pushbutton5_Callback(hObject, eventdata, handles)
@@ -884,10 +903,57 @@ handles.expname=exname;
 inst = 1;
 handles.inst = 1;
 handles.old_inst = 1;
-%save sonar_output.mat inst instloc tripod cmpss plotinfo
 replot (handles )
 
 
+% --- Executes on button press in save_pushbutton4.
+function save_pushbutton4_Callback(hObject, eventdata, handles)
+% hObject    handle to save_pushbutton4 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+inst = handles.inst;
+tripod = handles.tripod;
+instloc = handles.instloc;
+cmpss = handles.cmpss;
+plotinfo= handles.plotinfo;
+save sonar_output.mat inst instloc tripod cmpss plotinfo
+
+%
+function datetime_edit11_Callback(hObject, eventdata, handles)
+% hObject    handle to datetime_edit11 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of datetime_edit11 as text
+%        str2double(get(hObject,'String')) returns contents of datetime_edit11 as a double
+
+function plot_x_axis_edit13_Callback(hObject, eventdata, handles)
+% hObject    handle to plot_x_axis_edit13 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of plot_x_axis_edit13 as text
+%        str2double(get(hObject,'String')) returns contents of plot_x_axis_edit13 as a double
+
+function plot_y_axis_edit14_Callback(hObject, eventdata, handles)
+% hObject    handle to plot_y_axis_edit14 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+% Hints: get(hObject,'String') returns contents of plot_y_axis_edit14 as text
+%        str2double(get(hObject,'String')) returns contents of plot_y_axis_edit14 as a double
+
+function plot_z_axis_edit15_Callback(hObject, eventdata, handles)
+% hObject    handle to plot_z_axis_edit15 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of plot_z_axis_edit15 as text
+%        str2double(get(hObject,'String')) returns contents of plot_z_axis_edit15 as a double
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% here's the operational BEEF
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% it does this for virtually every call back, so be sure to get this right!
 function replot( handles )
 % Main routine for updating image
 % radian - degree conversions
@@ -976,6 +1042,7 @@ if(plot_tripod)
    trican3(handles); hold on
 end
 hold on
+% this shouldn't be hard wired should come from the GUI axis limits
 axis([-3 3 -3 3 -1 2])
 view(az,el)
 grid on
@@ -984,64 +1051,3 @@ ylabel('y')
 zlabel('z')
 hold off
 
-function plot_x_axis_edit13_Callback(hObject, eventdata, handles)
-% hObject    handle to plot_x_axis_edit13 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of plot_x_axis_edit13 as text
-%        str2double(get(hObject,'String')) returns contents of plot_x_axis_edit13 as a double
-
-% --- Executes during object creation, after setting all properties.
-function plot_x_axis_edit13_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to plot_x_axis_edit13 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
-end
-
-function plot_y_axis_edit14_Callback(hObject, eventdata, handles)
-% hObject    handle to plot_y_axis_edit14 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-% Hints: get(hObject,'String') returns contents of plot_y_axis_edit14 as text
-%        str2double(get(hObject,'String')) returns contents of plot_y_axis_edit14 as a double
-
-% --- Executes during object creation, after setting all properties.
-function plot_y_axis_edit14_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to plot_y_axis_edit14 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
-end
-
-
-
-function plot_z_axis_edit15_Callback(hObject, eventdata, handles)
-% hObject    handle to plot_z_axis_edit15 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of plot_z_axis_edit15 as text
-%        str2double(get(hObject,'String')) returns contents of plot_z_axis_edit15 as a double
-
-
-% --- Executes during object creation, after setting all properties.
-function plot_z_axis_edit15_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to plot_z_axis_edit15 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
-end
