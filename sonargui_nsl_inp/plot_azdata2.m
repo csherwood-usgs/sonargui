@@ -9,7 +9,7 @@ d2r = pi/180;
 Ro = .08255;
 % other processing parameters that might change with each deployment
 factor = 0.002; % converts profile_range to meters
-rfactor = 0.005; % converts scan count to range in meters (I hope...not sure what this number should be)
+%rfactor = 0.005; % converts scan count to range in meters (I hope...not sure what this number should be)
 ntrim = 57;
 ztrim = 1; % in m
 
@@ -41,6 +41,19 @@ if isempty(npoints)
     npoints=nc.NDataBytes(:);
     range_config=3;
 end
+if range_config < 5,    % added July '13 to allow for range=5
+    factor = 0.002;
+    rfactor = 1.0;
+    xyout=[-1.75:.025:1.75];
+    maxval=1.8;             %was 1.6
+else        % these should be different with range other than 3- not sure
+    factor = .0002;       % what they should be though.
+    %rfactor = str2num(range_config)/3;
+    rfactor=1;
+    xyout=[-2.25:.025:2.25];
+    maxval=2.3;
+end
+
 SampPerMeter = npoints/range_config;
 jt = nc{'time'}(tidx) + nc{'time2'}(tidx)/(1000*24*3600);
 dn = datenum(gregorian(double(jt)))
@@ -85,8 +98,8 @@ for i=1:naz
    ray_xyz = ray_xyz + repmat(xyzo,nr,1);
 
    % save values (these are still relative to azimuth sonar
-   x( (i-1)*nang+1:i*nang,1 ) = ray_xyz(:,1);
-   y( (i-1)*nang+1:i*nang,1 ) = ray_xyz(:,2);
+   x( (i-1)*nang+1:i*nang,1 ) = ray_xyz(:,1); x=x*rfactor;
+   y( (i-1)*nang+1:i*nang,1 ) = ray_xyz(:,2); y=y*rfactor;
    z( (i-1)*nang+1:i*nang,1 ) = ray_xyz(:,3);
       
    % reorient to tripod
@@ -136,11 +149,11 @@ if(min(z) < -3)
 end
 if(1)
 ok = find( isfinite(x(:)+y(:)+z(:)) & ...
-   (z(:)>-.4) & (z(:)<.4) & ...
-   ((x(:)-xo)>-1.6) & ((x(:)-xo)<1.6) &...
-   ((y(:)-yo)>-1.6) & ((y(:)-yo)<1.6) );
+   (z(:)>-.6) & (z(:)<.6) & ...
+   ((x(:)-xo)>-maxval) & ((x(:)-xo)<maxval) &...  % was 1.6
+   ((y(:)-yo)>-maxval) & ((y(:)-yo)<maxval) );
 
-[zg,xg,yg] = gridfit(x(ok)-xo,y(ok)-yo,z(ok),[-1.25:.025:1.25],[-1.25:.025:1.25],'smooth',.1);
+[zg,xg,yg] = gridfit(x(ok)-xo,y(ok)-yo,z(ok),xyout,xyout,'smooth',.1);
 [nr,nc]=size(zg);
 nn=length(zg(:))
    ray_xyz = r3d([xg(:)+xo yg(:)+yo zg(:)],tpry, 1);

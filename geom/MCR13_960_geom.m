@@ -26,19 +26,19 @@ instloc(2).oval=16.31;
 instloc(3).name='fanbeam sonar';
 instloc(3).coord='lab';
 instloc(3).xyz=[-0.517 -0.281 0.996];
-instloc(3).pry=[0 0 0];  % not rotated yet
+instloc(3).pry=[0 0 7];  % not rotated yet
 instloc(3).oname='none';
 instloc(3).oval=0.;
 
 % these are best estimate of measured values
 instloc(4).name='azimuth sonar';
 instloc(4).coord='lab';
-instloc(4).xyz=[0.0151 0.197 1.367];    % middle of pencil head
+instloc(4).xyz=[0.0151 0.06 1.367];    % middle of pencil head
 %instloc(4).xyz=[0.85 -1.26 1.05];  %  az drive
 % the yaw angle is -(180-132) (132 is the angle offset between adcp beam3
 % direction (defined as +Y or 0) and the azimuth angle 0). It needs to be
 % flipped 180 to get the legs in the right place
-instloc(4).pry=[0 0 0];
+instloc(4).pry=[2.5 2.7 -45];
 instloc(4).oname='tilt';
 instloc(4).oval = 0.;  %from initial playing
 
@@ -54,7 +54,7 @@ tripod.gr_foot = [ 1.213 -0.574 0];
 % these are taken from measurements CRS made for another experiment
 tripod.foothgt = .12;
 tripod.footrad = .15;
-tripod.apex = [0.05 -.3 2.1];  % guessed, not measured
+tripod.apex = [-0.3 -.2 2.1];  % guessed, not measured
 tripod.barhgt = 1.0;
 % colors
 tripod.red = [1 .2 .1 ];

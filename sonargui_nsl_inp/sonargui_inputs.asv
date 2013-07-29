@@ -26,11 +26,11 @@ input_struct(3).dpath='c:\home\data\FI2012\sonar_post\Iris_az\';
 input_struct(3).function='FI12_geom';  % make sure this is the $MATLABPATH
 input_struct(4).exname='MCR 2013- 959 West';
 input_struct(4).experiment='MCR 2013- 959 West';
-input_struct(4).dpath='c:\home\data\proc\959west_az\azm_files\';
+input_struct(4).dpath='c:\home\data\proc\959west_az';
 input_struct(4).function='MCR13_959_geom';  % make sure this is the $MATLABPATH
 input_struct(5).exname='MCR 2013- 960 North';
 input_struct(5).experiment='MCR 2013- 960 North';
-input_struct(5).dpath='c:\home\data\proc\960north_az_fan\azm_files\';
+input_struct(5).dpath='c:\home\data\proc\960north_az_fan';
 input_struct(5).function='MCR13_960_geom';  % make sure this is the $MATLABPATH
 
 %Now put the structure items into cell arrays

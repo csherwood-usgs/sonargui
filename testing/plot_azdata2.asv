@@ -9,7 +9,7 @@ d2r = pi/180;
 Ro = .08255;
 % other processing parameters that might change with each deployment
 factor = 0.002; % converts profile_range to meters
-%rfactor = 0.005; % converts scan count to range in meters (I hope...not sure what this number should be)
+rfactor = 0.005; % converts scan count to range in meters (I hope...not sure what this number should be)
 ntrim = 57;
 ztrim = 1; % in m
 
@@ -25,37 +25,114 @@ tilt = handles.instloc(4).oval;
 azdata_choice = get(handles.azdata_popupmenu5,'Value');
 azfile_names = get(handles.azdata_popupmenu5,'String');
 
-  fn=[char(handles.path) char(azfile_names(azdata_choice))];
+  fn=azfile_names(azdata_choice);
+  fn=[handles.path char(fn)];
 
-% get which of the times in the file to use
+% azdata_choice = get(handles.azdata_popupmenu5,'Value');
+% switch azdata_choice
+%    case 1
+%       disp('why am i here?')
+%    case 2
+%       fn = [handles.path 'az2009-12-09_raw.cdf'];
+%    case 3
+%       fn = [handles.path 'az2009-12-09b_raw.cdf'];
+%    case 4
+%       fn = [handles.path 'az2009-12-09c_raw.cdf'];
+%    case 5
+%       fn = [handles.path 'az2007-08-28_raw.cdf'];
+%    case 6
+%       fn = [handles.path 'az2007-08-29_raw.cdf'];
+%    case 7
+%       fn = [handles.path 'az2007-08-30_raw.cdf'];
+%    case 8
+%       fn = [handles.path 'az2007-08-31_raw.cdf'];
+%    case 9
+%       fn = [handles.path 'az2007-09-01_raw.cdf'];
+%    case 10
+%       fn = [handles.path 'az2007-09-02_raw.cdf'];
+%    case 11
+%       fn = [handles.path 'az2007-09-03_raw.cdf'];
+%    case 12
+%       fn = [handles.path 'az2007-09-04_raw.cdf'];
+%    case 13
+%       fn = [handles.path 'az2007-09-05_raw.cdf'];
+%    case 14
+%       fn = [handles.path 'az2007-09-06_raw.cdf'];
+%    case 15
+%       fn = [handles.path 'az2007-09-07_raw.cdf'];
+%    case 16
+%       fn = [handles.path 'az2007-09-08_raw.cdf'];
+%    case 17
+%       fn = [handles.path 'az2007-09-09_raw.cdf'];
+%    case 18
+%       fn = [handles.path 'az2007-09-10_raw.cdf'];
+%    case 19
+%       fn = [handles.path 'az2007-09-11_raw.cdf'];
+%    case 20
+%       fn = [handles.path 'az2007-09-12_raw.cdf'];
+%    case 21
+%       fn = [handles.path 'az2007-09-13_raw.cdf'];
+%    case 22
+%       fn = [handles.path 'az2007-09-14_raw.cdf'];
+%    case 23
+%       fn = [handles.path 'az2007-09-15_raw.cdf'];
+%    case 24
+%       fn = [handles.path 'az2007-09-16_raw.cdf'];
+%    case 25
+%       fn = [handles.path 'az2007-09-17_raw.cdf'];
+%    case 26
+%       fn = [handles.path 'az2007-09-18_raw.cdf'];
+%    case 27
+%       fn = [handles.path 'az2007-09-19_raw.cdf'];
+%    case 28
+%       fn = [handles.path 'az2007-09-20_raw.cdf'];
+%    case 28
+%       fn = [handles.path 'az2007-09-21_raw.cdf'];
+%    case 30
+%       fn = [handles.path 'az2007-09-22_raw.cdf'];
+%    case 31
+%       fn = [handles.path 'az2007-09-23_raw.cdf'];
+%    case 32
+%       fn = [handles.path 'az2007-09-24_raw.cdf'];
+%    case 33
+%       fn = [handles.path 'az2007-09-25_raw.cdf'];
+%    case 34
+%       fn = [handles.path 'az2007-09-26_raw.cdf'];
+%    case 35
+%       fn = [handles.path 'az2007-09-27_raw.cdf'];
+%    case 36
+%       fn = [handles.path 'az2007-09-28_raw.cdf'];
+%    case 37
+%       fn = [handles.path 'az2007-09-29_raw.cdf'];
+%    case 38
+%       fn = [handles.path 'az2007-09-30_raw.cdf'];
+%    case 39
+%       fn = [handles.path 'az2007-10-01_raw.cdf'];
+%    case 40
+%       fn = [handles.path 'az2012-01-30_raw.cdf'];
+%   case 41
+%       fn = [handles.path 'az2012-01-31_raw.cdf'];
+%    case 42
+%       fn = [handles.path 'az2012-02-01_raw.cdf'];
+%   case 43
+%       fn = [handles.path 'az2012-02-02_raw.cdf'];
+%    case 44
+%       fn = [handles.path 'az2012-02-03_raw.cdf'];
+%   case 45
+%       fn = [handles.path 'az2012-02-04_raw.cdf'];
+%       otherwise
+%       disp('pourquois suis-je ici?')
+% end
 tidx = str2num( get(handles.tindex_edit12,'String'))
 % fn='az2009-12-08_raw.cdf' % MVCO
 %%
 % ncload(fn,'time','time2','scan','points','rots','headangle','azangle','profile_range');
 nc = netcdf(fn);
-% these metadata are only from the WHSC logger, not IRIS
-npoints = nc.DataPoints(:);
-range_config=nc.Range(:);
-% if npoints ends up empty, assume it's an IRIS logger
-if isempty(npoints)
-    npoints=nc.NDataBytes(:);
-    range_config=3;
-end
-if range_config < 5,    % added July '13 to allow for range=5
-    factor = 0.002;
-    rfactor = 1.0;
-    xyout=[-1.25:.025:1.25];
-    maxval=1.6;             %was 1.6
-else
-    factor = .0002;
-    rfactor = range_config/3;
-    xyout=[-3.25:.05:3.25];
-    maxval=3.4;
-end
-
-SampPerMeter = npoints/range_config;
+npoints = nc.DataPoints(:)
+range_config=nc.Range(:)
+SampPerMeter = npoints/range_config
 jt = nc{'time'}(tidx) + nc{'time2'}(tidx)/(1000*24*3600);
-dn = datenum(gregorian(double(jt)))
+dn = datenum(gregorian(double(jt)));
 datestr(dn)
 set(handles.datetime_edit11,'String',datestr(dn))
 azangle=squeeze(nc{'azangle'}(tidx,:));
@@ -97,8 +174,8 @@ for i=1:naz
    ray_xyz = ray_xyz + repmat(xyzo,nr,1);
 
    % save values (these are still relative to azimuth sonar
-   x( (i-1)*nang+1:i*nang,1 ) = ray_xyz(:,1); x=x*rfactor;
-   y( (i-1)*nang+1:i*nang,1 ) = ray_xyz(:,2); y=y*rfactor;
+   x( (i-1)*nang+1:i*nang,1 ) = ray_xyz(:,1);
+   y( (i-1)*nang+1:i*nang,1 ) = ray_xyz(:,2);
    z( (i-1)*nang+1:i*nang,1 ) = ray_xyz(:,3);
       
    % reorient to tripod
@@ -136,23 +213,13 @@ end
 % yo = 0;
 xo = xyzo(1);
 yo = xyzo(2);
-%
-% the Azimuth data collected by the IRIS logger is a factor of 10 high
-% so correct for that before trying to assess ok
-% we should also have a way of treating the slightly higher MCR tripods
-% with a larger x-y range
-if(min(z) < -3)
-    x=x/10;
-    y=y/10;
-    z=z/10;
-end
 if(1)
 ok = find( isfinite(x(:)+y(:)+z(:)) & ...
    (z(:)>-.4) & (z(:)<.4) & ...
-   ((x(:)-xo)>-maxval) & ((x(:)-xo)<maxval) &...  % was 1.6
-   ((y(:)-yo)>-maxval) & ((y(:)-yo)<maxval) );
+   ((x(:)-xo)>-1.6) & ((x(:)-xo)<1.6) &...
+   ((y(:)-yo)>-1.6) & ((y(:)-yo)<1.6) );
 
-[zg,xg,yg] = gridfit(x(ok)-xo,y(ok)-yo,z(ok),xyout,xyout,'smooth',.1);
+[zg,xg,yg] = gridfit(x(ok)-xo,y(ok)-yo,z(ok),[-1.25:.025:1.25],[-1.25:.025:1.25],'smooth',.1);
 [nr,nc]=size(zg);
 nn=length(zg(:))
    ray_xyz = r3d([xg(:)+xo yg(:)+yo zg(:)],tpry, 1);
