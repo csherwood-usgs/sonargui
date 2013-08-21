@@ -1,6 +1,0 @@
-% this executes the commands necessa
-sonargui_inputs
-addpath('C:\Users\emontgomery\mtl\m_contrib\trunk\gridfitdir')
-addpath('C:\Users\emontgomery\mtl\m_cmg\trunk\sonarlib\unh_1209\prygui')
-addpath('C:\Users\emontgomery\mtl\m_cmg\trunk\sonarlib\unh_1209')
-sonargui_nsl_inp (path_names, expnames, fcns)

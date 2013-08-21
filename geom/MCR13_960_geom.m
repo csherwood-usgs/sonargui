@@ -66,4 +66,4 @@ tripod.green = [.1 1 .1];
 cmpss.xyz = [0. 0. 0.];
 % ADCP pitch in (1), roll in (2), heading in (3)
 % cmpss.pry = [-1.6 -1.6 134.5];
-cmpss.pry = [ 0 0 0 ];
+cmpss.pry = [ 0 0 8.31 ];   %(adcp heading =352, declination=16.31)

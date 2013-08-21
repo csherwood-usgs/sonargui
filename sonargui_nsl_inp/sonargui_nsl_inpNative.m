@@ -1003,7 +1003,7 @@ function load_pushbutton6_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 %
-load sonar_nsl_output
+load sonar_nsl_output  % gets hand_save from storage
 % this should reset the figure to how it was when last saved.
 %guidata(hand_save);
 
@@ -1027,6 +1027,7 @@ plot_x_axis_edit13_Callback(hObject, eventdata, hand_save);
 plot_y_axis_edit14_Callback(hObject, eventdata, hand_save);
 plot_z_axis_edit15_Callback(hObject, eventdata, hand_save);
 azdata_popupmenu5_Callback(hObject, eventdata, hand_save);
+experiment_popupmenu6_Callback(hObject, eventdata, hand_save);
 set(handles.experiment_popupmenu6,'String',hand_save.experiment);
 replot(handles)
 
@@ -1139,7 +1140,8 @@ h=line([-.08;+.08],[0;0],[0;0]);
 set(h,'linestyle','-','color',[0 0 0])
 
 if(azdata_choice~=1)
-   plot_azdata2(handles); hold on
+  % plot_azdata2(handles); hold on
+  plot_azdata2Native(handles); hold on
 end
 if(plot_fan)
    fancan3(handles); hold on % can draws the sonar

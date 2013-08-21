@@ -1141,6 +1141,7 @@ set(h,'linestyle','-','color',[0 0 0])
 
 if(azdata_choice~=1)
    plot_azdata2(handles); hold on
+  %plot_azdata2Native(handles); hold on
 end
 if(plot_fan)
    fancan3(handles); hold on % can draws the sonar

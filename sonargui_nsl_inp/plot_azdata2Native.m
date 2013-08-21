@@ -1,14 +1,9 @@
-function plot_azdataNative( fn, tidx,instloc )
-% plot_azdataNative - plot azimuth-drive sonar data with geometric correction
+function plot_azdata2Native( handles )
+% plot_azdata2Native - plot azimuth-drive sonar data with geometric correction
 % csherwood@usgs.gov
 %
 % modified 7/30/13 emontgomery@usgs.gov
 % uses native netCDF calls to access the data
-% This is a standalone version- it does NOT from sonargui
-% requires 3 arguments, the file name, the index, and the instloc
-% instloc is obtained by running the geom file that goes with the data
-
-if nargin ~=3; eval(['help ' mfilename]); return; end
 
 % establish conversion for degrees to radians
 d2r = pi/180;
@@ -26,13 +21,21 @@ ntrim = 57;
 ztrim = 1; % in m
 
 % tripod coordinates
-tpry = instloc(1).pry*d2r;
-txyzo = instloc(1).xyz;
+tpry = handles.instloc(1).pry*d2r;
+txyzo = handles.instloc(1).xyz;
 
 % azimuth-drive sonar coordinates
-pry = instloc(4).pry*d2r;
-xyzo = instloc(4).xyz;
-tilt = instloc(4).oval;
+pry = handles.instloc(4).pry*d2r;
+xyzo = handles.instloc(4).xyz;
+tilt = handles.instloc(4).oval;
+
+azdata_choice = get(handles.azdata_popupmenu5,'Value');
+azfile_names = get(handles.azdata_popupmenu5,'String');
+
+  fn=[char(handles.path) char(azfile_names(azdata_choice))];
+
+% get which of the times in the file to use
+tidx = str2num( get(handles.tindex_edit12,'String'))
 
 points=ncread(fn,'points');
 npoints=length(points);
@@ -56,6 +59,8 @@ t2=ncread(fn,'time2');
 try
     jt = double(t1(tidx)) + double(t2(tidx))/(1000*24*3600);
     dn = datenum(gregorian(double(jt)));
+    set(handles.datetime_edit11,'String',datestr(dn))
+
     %datestr(dn)
     azang=ncread(fn,'azangle');
     azangle=squeeze(azang(:,tidx));
@@ -79,8 +84,7 @@ try
             BSi(iAz,:)= mx;
         end
     end
-    
-    
+      
     %%
     % At this point, xyzo, pry, and Ro have az drive geometry info, and txyzo
     % and tpry have tripod geometry info. PRi contains estimate of distance to
@@ -155,13 +159,13 @@ try
             yg = reshape(ray_xyz(:,2),nr,nc);
             zg = reshape(ray_xyz(:,3),nr,nc);
             surf(xg,yg,zg)
-            view(0,90)
+            %view(0,90)
             shading flat
-            title(['MCR2013 960 North -  ' datestr(dn)])
-            xlabel('distance(m)')
-            ylabel('distance(m)')
+            %title(['MCR2013 960 North -  ' datestr(dn)])
+            %xlabel('distance(m)')
+            %ylabel('distance(m)')
             caxis([-.5 .4])
-            colorbar
+            % colorbar
             shg
             hh = findobj('Type','surface');
         else
