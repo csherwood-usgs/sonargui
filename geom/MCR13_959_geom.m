@@ -44,7 +44,7 @@ instloc(4).oname='tilt';
 %instloc(4).oval = -.85;  %from initial playing
 %instloc(4).oval = -2.5; % -2.5 was best fit for CRS from plot_az_crs
 %instloc(4).oval=-1; % This is NOT Ellyns best fit, but works best for UNH
-instloc(4).oval=-2.4; % This is Ellyns best guess
+instloc(4).oval=-1.5; % This is Ellyns best guess from iterating so scans 1 & 60 overlay
 
 instloc(5).name='LISST';
 instloc(5).coord='lab';

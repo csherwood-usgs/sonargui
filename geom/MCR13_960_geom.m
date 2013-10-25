@@ -40,7 +40,7 @@ instloc(4).xyz=[0.0151 0.06 1.367];    % middle of pencil head
 % flipped 180 to get the legs in the right place
 instloc(4).pry=[2.5 2.7 -45];
 instloc(4).oname='tilt';
-instloc(4).oval = 0.;  %from initial playing
+instloc(4).oval = .3;  %Ellyns best guess from iterating so scans 1 & 60 overlay
 
 t960.gr=[1.213 -0.574];
 t960.bl= [-1.215 -1.44];
@@ -55,7 +55,7 @@ tripod.gr_foot = [ 1.213 -0.574 0];
 tripod.foothgt = .12;
 tripod.footrad = .15;
 tripod.apex = [-0.3 -.2 2.1];  % guessed, not measured
-tripod.barhgt = 1.0;
+tripod.barhgt = 1.3;
 % colors
 tripod.red = [1 .2 .1 ];
 tripod.blue = [.2 0 1];

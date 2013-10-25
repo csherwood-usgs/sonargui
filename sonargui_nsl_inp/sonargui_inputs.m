@@ -13,16 +13,16 @@
 %
 addpath 'C:\Users\emontgomery\Documents\GitHub\sonargui\geom'
 input_struct(1).experiment='UNH Tank';
-input_struct(1).dpath='c:\home\data\unh\sonar_data\';
+input_struct(1).dpath='c:\home\data\sonar_az_keep4sonargui\unh_tank\';
 input_struct(1).function='unh_geom';  % must be in the geom directory above
 input_struct(1).exname='UNH Tank';
 input_struct(2).exname='MVCO 2007';
 input_struct(2).experiment='MVCO 2007';
-input_struct(2).dpath='c:\home\data\mvco_07\sonar_data\';
+input_struct(2).dpath='c:\home\data\sonar_az_keep4sonargui\mvco_07\';
 input_struct(2).function='mvco_geom';  % make sure this is the $MATLABPATH
 input_struct(3).exname='Fire Island 2012';
 input_struct(3).experiment='Fire Island 2012';
-input_struct(3).dpath='c:\home\data\FI2012\sonar_post\Iris_az\';
+input_struct(3).dpath='c:\home\data\FI12\sonar_post\Iris_az\';
 input_struct(3).function='FI12_geom';  % make sure this is the $MATLABPATH
 input_struct(4).exname='MCR 2013- 959 West';
 input_struct(4).experiment='MCR 2013- 959 West';
@@ -32,6 +32,10 @@ input_struct(5).exname='MCR 2013- 960 North';
 input_struct(5).experiment='MCR 2013- 960 North';
 input_struct(5).dpath='c:\home\data\proc\960north_az_fan\azm_files\';
 input_struct(5).function='MCR13_960_geom';  % make sure this is the $MATLABPATH
+input_struct(6).exname='Hatteras 2009- 855';
+input_struct(6).experiment='Hatteras 2009- 855';
+input_struct(6).dpath='c:\home\data\sonar_az_keep4sonargui\hatteras09\';
+input_struct(6).function='hatteras09_geom';  % make sure this is the $MATLABPATH
 
 %Now put the structure items into cell arrays
 for ik=1:length(input_struct)

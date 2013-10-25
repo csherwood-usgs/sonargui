@@ -10,7 +10,9 @@ Ro = .08255;
 % other processing parameters that might change with each deployment
 factor = 0.002; % converts profile_range to meters
 %rfactor = 0.005; % converts scan count to range in meters (I hope...not sure what this number should be)
-ntrim = 57;
+%ntrim = 57;
+% in native matlab should be 0
+ntrim = 0;
 ztrim = 1; % in m
 
 % tripod coordinates
@@ -44,14 +46,18 @@ end
 if range_config < 5,    % added July '13 to allow for range=5
     factor = 0.002;
     rfactor = 1.0;
-    xyout=[-1.75:.025:1.75];
-    maxval=1.8;             %was 1.6
+    %xyout=[-1.75:.025:1.75];
+    xyout=[-2.75:.025:3.0];
+    %maxval=1.8;             %was 1.6
+    %for MCR 960 deploymment
+    maxval=3; minval=3; 
 else        % these should be different with range other than 3- not sure
+    xyout=[-2.75:.025:3.5];
+   % for MCR 959 deployment
+       maxval=4; minval=3;
     factor = .0002;       % what they should be though.
     %rfactor = str2num(range_config)/3;
     rfactor=1;
-    xyout=[-2.25:.025:2.25];
-    maxval=2.3;
 end
 
 SampPerMeter = npoints/range_config;
@@ -87,7 +93,9 @@ ncclose
 % them to instrument, then tripod coords, and plot.
 x = NaN*ones(naz*nang,1); y=x; z=x;
 for i=1:naz
-   ray_xyz = [Ro*ones(1,nang)' (PRi(i,:).*sin(beta(i,:)))' -(PRi(i,:).*cos(beta(i,:)))' ];
+        ray_xyz = [(PRi(i,:).*sin(beta(i,:)))' Ro*ones(1,nang)' -(PRi(i,:).*cos(beta(i,:)))'];
+   % x and y must be swapped to match plotrange_cdf
+   %ray_xyz = [Ro*ones(1,nang)' (PRi(i,:).*sin(beta(i,:)))' -(PRi(i,:).*cos(beta(i,:)))' ];
    ray_xyzo = [Ro 0 0];
    
    % reorient here if needed
@@ -113,7 +121,7 @@ for i=1:naz
    
    if(0)
       % color by depth
-      h=scatter3(ray_xyz(ok,1),ray_xyz(ok,2),ray_xyz(ok,3),10,ray_xyz(ok,3),'filled'); hold on
+      h=scatter3(ray_xyz(:,1),ray_xyz(:,2),ray_xyz(:,3),10,ray_xyz(:,3),'filled'); hold on
       caxis([-.2 .2])
    elseif(0)
       % array of backscatter values
@@ -150,8 +158,8 @@ end
 if(1)
 ok = find( isfinite(x(:)+y(:)+z(:)) & ...
    (z(:)>-.6) & (z(:)<.6) & ...
-   ((x(:)-xo)>-maxval) & ((x(:)-xo)<maxval) &...  % was 1.6
-   ((y(:)-yo)>-maxval) & ((y(:)-yo)<maxval) );
+   ((x(:)-xo)>-minval) & ((x(:)-xo)<maxval) &...  % was 1.6
+   ((y(:)-yo)>-minval) & ((y(:)-yo)<maxval) );
 
 [zg,xg,yg] = gridfit(x(ok)-xo,y(ok)-yo,z(ok),xyout,xyout,'smooth',.1);
 [nr,nc]=size(zg);
